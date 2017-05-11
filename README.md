@@ -7,12 +7,13 @@ Reduce setup overhead for your development machine by using this Celery mock ins
 
 ### Celery does not work on Windows
 
-Celery has complexity regarding the spwning of child processes: It is assumed that the parent state is copied to the children
-(a Linux assumption), this is a bad assumption because it does not hold true for Windows, and special care must be taken to ensure
-locks are freed after the spwn.  This also introducea
+Celery has complexity regarding the spwning of child processes in the billiard library: It is assumed that the parent state is copied to the children (a Linux assumption), and this is bad: Special care must be taken to ensure locks are freed after the spawn. This introduces dependency on copied global variables, which does not hold true on Windows. 
 
 ### Celery requires yet-another-service
 
+Less services required to get a thing running is better, yes?
 
+## Solution
 
-Redash requires Celery, which in turn requires a message passing service. Celery (and it's billiard library) have complexity regarding 
+Mock the Celery API to solve the problems, and make restarts easier.
+
